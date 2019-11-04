@@ -2,7 +2,7 @@ go test -v -run="none" -bench=. -benchtime=1s -benchmem
 ```
 goos: darwin
 goarch: amd64
-pkg: hslam.com/mgit/Mort/compress
+pkg: hslam.com/git/x/compress
 BenchmarkCompressBestSpeedFlate-4            	   10000	    193690 ns/op	 1205608 B/op	      20 allocs/op
 BenchmarkCompressBestSpeedZlib-4             	   10000	    198822 ns/op	 1206249 B/op	      24 allocs/op
 BenchmarkCompressBestSpeedGzip-4             	   10000	    208990 ns/op	 1206306 B/op	      22 allocs/op
@@ -22,7 +22,7 @@ BenchmarkAllDefaultCompressionFlate-4        	   10000	    174826 ns/op	  857313
 BenchmarkAllDefaultCompressionZlib-4         	   10000	    176618 ns/op	  858042 B/op	      33 allocs/op
 BenchmarkAllDefaultCompressionGzip-4         	   10000	    173646 ns/op	  858720 B/op	      30 allocs/op
 PASS
-ok  	hslam.com/mgit/Mort/compress	33.659s
+ok  	hslam.com/git/x/compress	33.659s
 ```
 example
 ```

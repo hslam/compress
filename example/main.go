@@ -1,7 +1,7 @@
 package main
 
 import (
-	"hslam.com/mgit/Mort/compress"
+	"hslam.com/git/x/compress"
 	"fmt"
 )
 
