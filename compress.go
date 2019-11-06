@@ -1,7 +1,5 @@
 package compress
 
-
-
 import (
 	"bytes"
 	"compress/flate"
@@ -11,12 +9,14 @@ import (
 )
 
 type Level int
+
 const (
 	NoCompression      Level= 0
 	BestSpeed          Level= 1
 	BestCompression    Level= 9
 	DefaultCompression Level= -1
 )
+
 type Compressor interface {
 	Compress(data []byte) ([]byte, error)
 	Uncompress(data []byte) ([]byte, error)
@@ -118,8 +118,6 @@ func (c ZlibCompressor) Uncompress(data []byte) ([]byte, error) {
 	}
 	return out.Bytes(),nil
 }
-
-
 
 type GzipCompressor struct{
 	Level Level
