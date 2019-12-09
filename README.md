@@ -88,7 +88,7 @@ ok  	hslam.com/git/x/compress	33.265s
 ```
 
 ### Licence
-This package is licenced under a MIT licence (Copyright (c) 2019 Mort Huang)
+This package is licenced under a MIT licence (Copyright (c) 2019 Meng Huang)
 
 ### Authors
-compress was written by Mort Huang.
+compress was written by Meng Huang.
