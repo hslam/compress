@@ -10,11 +10,11 @@ A compress library written in golang.
 
 ### Install
 ```
-go get hslam.com/git/x/compress
+go get github.com/hslam/compress
 ```
 ### Import
 ```
-import "hslam.com/git/x/compress"
+import "github.com/hslam/compress"
 ```
 ### Usage
 #### Example
@@ -22,7 +22,7 @@ import "hslam.com/git/x/compress"
 package main
 
 import (
-	"hslam.com/git/x/compress"
+	"github.com/hslam/compress"
 	"fmt"
 )
 
@@ -64,7 +64,7 @@ go test -v -run="none" -bench=. -benchtime=1s -benchmem
 ```
 goos: darwin
 goarch: amd64
-pkg: hslam.com/git/x/compress
+pkg: github.com/hslam/compress
 BenchmarkCompressBestSpeedFlate-4            	   10000	    190878 ns/op	 1205606 B/op	      20 allocs/op
 BenchmarkCompressBestSpeedZlib-4             	   10000	    195048 ns/op	 1206249 B/op	      24 allocs/op
 BenchmarkCompressBestSpeedGzip-4             	   10000	    194059 ns/op	 1206306 B/op	      22 allocs/op
@@ -84,7 +84,7 @@ BenchmarkAllDefaultCompressionFlate-4        	   10000	    173061 ns/op	  857313
 BenchmarkAllDefaultCompressionZlib-4         	   10000	    184280 ns/op	  858042 B/op	      33 allocs/op
 BenchmarkAllDefaultCompressionGzip-4         	   10000	    173342 ns/op	  858720 B/op	      30 allocs/op
 PASS
-ok  	hslam.com/git/x/compress	33.265s
+ok  	github.com/hslam/compress	33.265s
 ```
 
 ### Licence
