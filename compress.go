@@ -1,170 +1,115 @@
+// Copyright (c) 2019 Meng Huang (mhboy@outlook.com)
+// This package is licensed under a MIT license that can be found in the LICENSE file.
+
+// Package compress implements compressing and uncompressing.
 package compress
 
 import (
 	"bytes"
 	"compress/flate"
-	"compress/zlib"
 	"compress/gzip"
+	"compress/zlib"
 	"io"
 )
 
+// Level defines the level for compression.
+// Higher levels typically run slower but compress more.
 type Level int
 
 const (
-	NoCompression      Level= 0
-	BestSpeed          Level= 1
-	BestCompression    Level= 9
-	DefaultCompression Level= -1
+	//NoCompression does not attempt any compression.
+	NoCompression Level = 0
+	//BestSpeed defines the level of best speed.
+	BestSpeed Level = 1
+	//Level2 defines the level 2.
+	Level2 Level = 2
+	//Level3 defines the level 3.
+	Level3 Level = 3
+	//Level4 defines the level 4.
+	Level4 Level = 4
+	//Level5 defines the level 5.
+	Level5 Level = 5
+	//Level6 defines the level 6.
+	Level6 Level = 6
+	//Level7 defines the level 7.
+	Level7 Level = 7
+	//Level8 defines the level 8.
+	Level8 Level = 8
+	//BestCompression defines the level of best compression.
+	BestCompression Level = 9
+	//DefaultCompression uses the default compression level.
+	DefaultCompression Level = -1
+	// HuffmanOnly will use Huffman compression only, giving
+	// a very fast compression for all types of input,
+	// but sacrificing considerable compression efficiency.
+	HuffmanOnly Level = -2
 )
 
-type Compressor interface {
-	Compress(data []byte) ([]byte, error)
-	Uncompress(data []byte) ([]byte, error)
+type Type string
+
+const (
+	//Flate defines the compressor type of flate .
+	Flate Type = "flate"
+	//Zlib defines the compressor type of zlib .
+	Zlib Type = "zlib"
+	//Gzip defines the compressor type of gzip .
+	Gzip Type = "gzip"
+)
+
+// Writer defines the writer interface for compressing data.
+type Writer interface {
+	Write(data []byte) (n int, err error)
+	Flush() error
+	Close() error
 }
 
-type FlateCompressor struct{
+// Reader defines the reader interface for uncompressing data.
+type Reader interface {
+	Read(p []byte) (n int, err error)
+	Close() error
+}
+
+// Compressor defines the struct of compressor.
+type Compressor struct {
+	Type  Type
 	Level Level
 }
 
-func (c FlateCompressor) Compress(data []byte) ([]byte, error) {
+// Compress returns the compressed data.
+func (c *Compressor) Compress(data []byte) []byte {
 	buf := bytes.NewBuffer(nil)
-	var(
-		write *flate.Writer
-		err error
-	)
-	switch c.Level {
-	case BestSpeed:
-		write, err = flate.NewWriter(buf, flate.BestSpeed)
-	case BestCompression:
-		write, err = flate.NewWriter(buf, flate.BestCompression)
-	case DefaultCompression:
-		write, err = flate.NewWriter(buf, flate.DefaultCompression)
+	var writer Writer
+	switch c.Type {
+	case Flate:
+		writer, _ = flate.NewWriter(buf, int(c.Level))
+	case Zlib:
+		writer, _ = zlib.NewWriterLevel(buf, int(c.Level))
+	case Gzip:
+		writer, _ = gzip.NewWriterLevel(buf, int(c.Level))
 	default:
-		return data,nil
+		return data
 	}
-	if err != nil {
-		return nil,err
-	}
-	defer write.Close()
-	_,err=write.Write(data)
-	if err != nil {
-		return nil,err
-	}
-	err=write.Flush()
-	if err != nil {
-		return nil,err
-	}
-	return buf.Bytes(),nil
+	defer writer.Close()
+	writer.Write(data)
+	writer.Flush()
+	return buf.Bytes()
 }
 
-func (c FlateCompressor) Uncompress(data []byte) ([]byte, error) {
-	buf := bytes.NewBuffer(data)
-	reader := flate.NewReader(buf)
+// Uncompress returns the uncompressed data.
+func (c *Compressor) Uncompress(data []byte) []byte {
+	var reader Reader
+	switch c.Type {
+	case Flate:
+		reader = flate.NewReader(bytes.NewBuffer(data))
+	case Zlib:
+		reader, _ = zlib.NewReader(bytes.NewBuffer(data))
+	case Gzip:
+		reader, _ = gzip.NewReader(bytes.NewBuffer(data))
+	default:
+		return data
+	}
 	defer reader.Close()
 	var out bytes.Buffer
-	_,err:=io.Copy(&out,reader)
-	if err != nil&&err!=io.ErrUnexpectedEOF {
-		return nil,err
-	}
-	return out.Bytes(),nil
-}
-
-type ZlibCompressor struct{
-	Level Level
-}
-
-func (c ZlibCompressor) Compress(data []byte) ([]byte, error) {
-	buf := bytes.NewBuffer(nil)
-	var(
-		write *zlib.Writer
-		err error
-	)
-	switch c.Level {
-	case BestSpeed:
-		write, err = zlib.NewWriterLevel(buf, zlib.BestSpeed)
-	case BestCompression:
-		write, err = zlib.NewWriterLevel(buf, zlib.BestCompression)
-	case DefaultCompression:
-		write, err = zlib.NewWriterLevel(buf, zlib.DefaultCompression)
-	default:
-		return data,nil
-	}
-	if err != nil {
-		return nil,err
-	}
-	defer write.Close()
-	_,err=write.Write(data)
-	if err != nil {
-		return nil,err
-	}
-	err=write.Flush()
-	if err != nil {
-		return nil,err
-	}
-	return buf.Bytes(),nil
-}
-
-func (c ZlibCompressor) Uncompress(data []byte) ([]byte, error) {
-	buf := bytes.NewBuffer(data)
-	reader, err:= zlib.NewReader(buf)
-	defer reader.Close()
-	if err != nil {
-		return nil,err
-	}
-	var out bytes.Buffer
-	_,err=io.Copy(&out,reader)
-	if err != nil&&err!=io.ErrUnexpectedEOF {
-		return nil,err
-	}
-	return out.Bytes(),nil
-}
-
-type GzipCompressor struct{
-	Level Level
-}
-
-func (c GzipCompressor) Compress(data []byte) ([]byte, error) {
-	buf := bytes.NewBuffer(nil)
-	var(
-		write *gzip.Writer
-		err error
-	)
-	switch c.Level {
-	case BestSpeed:
-		write, err = gzip.NewWriterLevel(buf, gzip.BestSpeed)
-	case BestCompression:
-		write, err = gzip.NewWriterLevel(buf, gzip.BestCompression)
-	case DefaultCompression:
-		write, err = gzip.NewWriterLevel(buf, gzip.DefaultCompression)
-	default:
-		return data,nil
-	}
-	if err != nil {
-		return nil,err
-	}
-	defer write.Close()
-	_,err=write.Write(data)
-	if err != nil {
-		return nil,err
-	}
-	err=write.Flush()
-	if err != nil {
-		return nil,err
-	}
-	return buf.Bytes(),nil
-}
-
-func (c GzipCompressor) Uncompress(data []byte) ([]byte, error) {
-	buf := bytes.NewBuffer(data)
-	reader, err:= gzip.NewReader(buf)
-	defer reader.Close()
-	if err != nil {
-		return nil,err
-	}
-	var out bytes.Buffer
-	_,err=io.Copy(&out,reader)
-	if err != nil&&err!=io.ErrUnexpectedEOF {
-		return nil,err
-	}
-	return out.Bytes(),nil
+	io.Copy(&out, reader)
+	return out.Bytes()
 }
