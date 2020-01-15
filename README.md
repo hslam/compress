@@ -1,4 +1,11 @@
 # compress
+[![GoDoc](https://godoc.org/github.com/hslam/compress?status.svg)](https://godoc.org/github.com/hslam/compress)
+[![Build Status](https://travis-ci.org/hslam/compress.svg?branch=master)](https://travis-ci.org/hslam/compress)
+[![codecov](https://codecov.io/gh/hslam/compress/branch/master/graph/badge.svg)](https://codecov.io/gh/hslam/compress)
+[![Go Report Card](https://goreportcard.com/badge/github.com/hslam/compress)](https://goreportcard.com/report/github.com/hslam/compress)
+[![GitHub release](https://img.shields.io/github/release/hslam/compress.svg)](https://github.com/hslam/compress/releases/latest)
+[![LICENSE](https://img.shields.io/github/license/hslam/compress.svg?style=flat-square)](https://github.com/hslam/compress/blob/master/LICENSE)
+
 Package compress implements compressing and uncompressing in golang.
 
 ## Feature
