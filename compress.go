@@ -45,6 +45,7 @@ const (
 	HuffmanOnly Level = -2
 )
 
+// Type defines the type for compression.
 type Type string
 
 const (
