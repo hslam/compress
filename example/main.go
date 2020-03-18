@@ -26,7 +26,7 @@ func Zlib() {
 	compressor := &compress.Compressor{Type: compress.Zlib, Level: compress.DefaultCompression}
 	compressBytes := compressor.Compress(readyBytes)
 	uncompressBytes := compressor.Uncompress(compressBytes)
-	fmt.Printf("flat %d->%d->%d\n", len(readyBytes), len(compressBytes), len(uncompressBytes))
+	fmt.Printf("zlib %d->%d->%d\n", len(readyBytes), len(compressBytes), len(uncompressBytes))
 }
 
 //Gzip Example
@@ -34,5 +34,5 @@ func Gzip() {
 	compressor := &compress.Compressor{Type: compress.Gzip, Level: compress.DefaultCompression}
 	compressBytes := compressor.Compress(readyBytes)
 	uncompressBytes := compressor.Uncompress(compressBytes)
-	fmt.Printf("flat %d->%d->%d\n", len(readyBytes), len(compressBytes), len(uncompressBytes))
+	fmt.Printf("gzip %d->%d->%d\n", len(readyBytes), len(compressBytes), len(uncompressBytes))
 }
