@@ -1,6 +1,6 @@
 # compress
 [![GoDoc](https://godoc.org/github.com/hslam/compress?status.svg)](https://godoc.org/github.com/hslam/compress)
-[![Build Status](https://travis-ci.org/hslam/compress.svg?branch=master)](https://travis-ci.org/hslam/compress)
+[![Build Status](https://github.com/hslam/compress/workflows/build/badge.svg)](https://github.com/hslam/compress/actions)
 [![codecov](https://codecov.io/gh/hslam/compress/branch/master/graph/badge.svg)](https://codecov.io/gh/hslam/compress)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hslam/compress)](https://goreportcard.com/report/github.com/hslam/compress)
 [![GitHub release](https://img.shields.io/github/release/hslam/compress.svg)](https://github.com/hslam/compress/releases/latest)
@@ -25,7 +25,7 @@ import "github.com/hslam/compress"
 ```
 ### Usage
 #### Example
-```
+```go
 package main
 
 import (
